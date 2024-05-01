@@ -16,7 +16,7 @@ public final class QaraSubscription: NSObject, ObservableObject {
 
     public static let shared = QaraSubscription()
 
-    @Published private(set) var purchasedSubscriptions: [Product] = []
+    @Published public private(set) var purchasedSubscriptions: [Product] = []
     @Published var transactionState: Product.PurchaseResult?
 
     var updateListenerTask: Task<Void, Error>?
