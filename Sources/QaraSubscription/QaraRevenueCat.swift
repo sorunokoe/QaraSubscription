@@ -13,14 +13,14 @@ public class QaraRevenueCat {
 
     private init() {}
 
-    func configure(apiKey: String, userID: String?) {
+    public func configure(apiKey: String, userID: String?) {
         #if DEBUG
         Purchases.logLevel = .debug
         #endif
         Purchases.configure(withAPIKey: apiKey, appUserID: userID)
     }
     
-    func logIn(userID: String) {
+    public func logIn(userID: String) {
         Purchases.shared.logIn(userID) { (customerInfo, created, error) in
             #if DEBUG
             print("💰 QaraRevenueCat start:")
@@ -37,11 +37,11 @@ public class QaraRevenueCat {
         }
     }
     
-    func logOut() async {
+    public func logOut() async {
         _ = try? await Purchases.shared.logOut()
     }
     
-    func getOfferings() async -> [Package] {
+    public func getOfferings() async -> [Package] {
         await withUnsafeContinuation { continuation in
             Purchases.shared.getOfferings { (offerings, error) in
                 if let packages = offerings?.current?.availablePackages {

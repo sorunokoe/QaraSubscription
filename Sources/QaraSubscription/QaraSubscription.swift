@@ -10,20 +10,19 @@ typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
 
 public final class QaraSubscription: NSObject, ObservableObject {
 
-    enum AppSubscriptionState {
+    public enum AppSubscriptionState {
         case active, inactive, none
     }
 
     static let shared = QaraSubscription()
-    private var state: AppSubscriptionState = .none
 
-    @Published var products: [Product] = []
+    @Published private(set) var purchasedSubscriptions: [Product] = []
     @Published var transactionState: Product.PurchaseResult?
 
     var updateListenerTask: Task<Void, Error>?
-
-    @Published private(set) var purchasedSubscriptions: [Product] = []
-    @Published var subscriptionStatus: AppSubscriptionState = .none
+    
+    @Published public  var products: [Product] = []
+    @Published public var subscriptionStatus: AppSubscriptionState = .none
 
     private override init() { 
         super.init()
@@ -33,7 +32,7 @@ public final class QaraSubscription: NSObject, ObservableObject {
         updateListenerTask?.cancel()
     }
 
-    func configure(secret: String, productsId: [String]) {
+    public func configure(productsId: [String]) {
         // Start a transaction listener as close to app launch as possible so you don't miss any transactions.
         updateListenerTask = listenForTransactions()
 
@@ -44,7 +43,7 @@ public final class QaraSubscription: NSObject, ObservableObject {
     }
 
     @MainActor
-    func redeemCode() {
+    public func redeemCode() {
         let paymentQueue = SKPaymentQueue.default()
         paymentQueue.presentCodeRedemptionSheet()
     }
@@ -64,7 +63,7 @@ public final class QaraSubscription: NSObject, ObservableObject {
     }
 
     @MainActor
-    func updateCustomerProductStatus() async {
+    public func updateCustomerProductStatus() async {
         var purchasedSubscriptions: [Product] = []
 
         // Iterate through all of the user's purchased products.
