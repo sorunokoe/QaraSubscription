@@ -4,9 +4,9 @@ public enum StoreError: Error {
     case failedVerification
 }
 
-typealias Transaction = StoreKit.Transaction
-typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
-typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
+public typealias Transaction = StoreKit.Transaction
+public typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
+public typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
 
 public final class QaraSubscription: NSObject, ObservableObject {
 
@@ -103,7 +103,7 @@ public final class QaraSubscription: NSObject, ObservableObject {
         }
     }
 
-    func purchase(product: Product) async throws -> Transaction? {
+    public func purchase(product: Product) async throws -> Transaction? {
         let result = try await product.purchase()
 
         switch result {
