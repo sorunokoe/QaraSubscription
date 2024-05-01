@@ -5,17 +5,23 @@ import PackageDescription
 
 let package = Package(
     name: "QaraSubscription",
+    platforms: [.iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "QaraSubscription",
             targets: ["QaraSubscription"]),
     ],
+    dependencies: [
+        .package(name: "RevenueCat", url: "https://github.com/RevenueCat/purchases-ios-spm.git", .upToNextMajor(from: "4.41.1"))
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "QaraSubscription"),
+            name: "QaraSubscription",
+            dependencies: ["RevenueCat"]
+        ),
         .testTarget(
             name: "QaraSubscriptionTests",
             dependencies: ["QaraSubscription"]),
