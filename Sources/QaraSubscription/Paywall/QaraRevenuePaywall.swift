@@ -19,6 +19,8 @@ public struct QaraRevenuePaywall: View {
     var restoreCompleted: (() -> Void)?
     var purchaseFailed: (() -> Void)?
 
+    @State var showPaywall: Bool = false
+
     public init(
         entitlementIdentifier: String,
         purchaseStarted: (() -> Void)? = nil,
@@ -37,41 +39,57 @@ public struct QaraRevenuePaywall: View {
     }
 
     public var body: some View {
-        PaywallView(displayCloseButton: false)
-//            .presentPaywallIfNeeded(
-//                requiredEntitlementIdentifier: entitlementIdentifier,
-//                presentationMode: .fullScreen,
-//                purchaseStarted: {
-//                    #if DEBUG
-//                    print("💰Purchase started")
-//                    #endif
-//                    purchaseStarted?()
-//                },
-//                purchaseCompleted: { customerInfo in
-//                    #if DEBUG
-//                    print("💰Purchase completed: \(customerInfo.entitlements)")
-//                    #endif
-//                    purchaseCompleted?()
-//                },
-//                purchaseCancelled: {
-//                    #if DEBUG
-//                    print("💰Purchase canceled")
-//                    #endif
-//                    purchaseCancelled?()
-//                },
-//                restoreCompleted: { customerInfo in
-//                    #if DEBUG
-//                    print("💰Purchases restored: \(customerInfo.entitlements)")
-//                    #endif
-//                    restoreCompleted?()
-//                },
-//                purchaseFailure: { error in
-//                    #if DEBUG
-//                    print("💰Purchase failured: \(error.localizedDescription)")
-//                    #endif
-//                    purchaseFailed?()
-//                }
-//            )
+        VStack {}
+            .task {
+                guard Purchases.isConfigured else {
+                    #if DEBUG
+                    print("💰Purchase error: purchasesNotConfigured")
+                    #endif
+                    return
+                }
+                if
+                    let info = try? await Purchases.shared.customerInfo(),
+                    !info.entitlements
+                        .activeInCurrentEnvironment
+                        .keys
+                        .contains(entitlementIdentifier)
+                {
+                    showPaywall = true
+                }
+            }
+            .fullScreenCover(isPresented: $showPaywall, content: {
+                PaywallView(displayCloseButton: false)
+                    .onPurchaseCancelled {
+                        #if DEBUG
+                        print("💰Purchase canceled")
+                        #endif
+                        purchaseCancelled?()
+                    }
+                    .onPurchaseStarted { _ in
+                        #if DEBUG
+                        print("💰Purchase started")
+                        #endif
+                        purchaseStarted?()
+                    }
+                    .onPurchaseCompleted { info in
+                        #if DEBUG
+                        print("💰Purchase completed: \(info.entitlements)")
+                        #endif
+                        purchaseCompleted?()
+                    }
+                    .onRestoreCompleted { info in
+                        #if DEBUG
+                        print("💰Purchases restored: \(info.entitlements)")
+                        #endif
+                        restoreCompleted?()
+                    }
+                    .onPurchaseFailure { error in
+                        #if DEBUG
+                        print("💰Purchase failured: \(error.localizedDescription)")
+                        #endif
+                        purchaseFailed?()
+                    }
+            })
     }
 }
 
