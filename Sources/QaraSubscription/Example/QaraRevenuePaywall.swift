@@ -10,18 +10,18 @@ import RevenueCat
 import RevenueCatUI
 
 @MainActor
-struct QaraRevenuePaywall: View {
+public struct QaraRevenuePaywall: View {
     
     @State var packages: [Package] = []
     
     let entitlementIdentifier: String
     
-    init(entitlementIdentifier: String) {
+    public init(entitlementIdentifier: String) {
         self.entitlementIdentifier = entitlementIdentifier
         QaraRevenueCat.shared.configure(apiKey: "appl_mugZXTEAngsSPeaMPubAxBuUKXu", userID: nil)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             ForEach(packages, id: \.identifier) {
                 Text($0.storeProduct.localizedTitle)
