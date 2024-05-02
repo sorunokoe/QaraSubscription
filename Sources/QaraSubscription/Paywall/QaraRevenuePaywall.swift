@@ -19,7 +19,7 @@ public struct QaraRevenuePaywall: View {
     var restoreCompleted: (() -> Void)?
     var purchaseFailed: (() -> Void)?
 
-    init(
+    public init(
         entitlementIdentifier: String,
         purchaseStarted: (() -> Void)? = nil,
         purchaseCompleted: (() -> Void)? = nil,
