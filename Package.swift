@@ -10,6 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "QaraSubscription",
+            type: .dynamic,
             targets: ["QaraSubscription"]),
     ],
     dependencies: [
@@ -20,7 +21,10 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "QaraSubscription",
-            dependencies: ["RevenueCat"]
+            dependencies: [
+                .product(name: "RevenueCat", package: "RevenueCat"),
+                .product(name: "RevenueCatUI", package: "RevenueCat")
+            ]
         ),
         .testTarget(
             name: "QaraSubscriptionTests",
