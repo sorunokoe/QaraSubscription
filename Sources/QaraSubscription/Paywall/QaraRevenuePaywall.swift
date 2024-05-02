@@ -37,7 +37,7 @@ public struct QaraRevenuePaywall: View {
     }
 
     public var body: some View {
-        EmptyView()
+        VStack{ }
             .presentPaywallIfNeeded(
                 requiredEntitlementIdentifier: entitlementIdentifier,
                 presentationMode: .fullScreen,
