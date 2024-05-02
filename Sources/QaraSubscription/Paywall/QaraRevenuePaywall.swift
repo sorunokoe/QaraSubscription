@@ -75,12 +75,14 @@ public struct QaraRevenuePaywall: View {
                         #if DEBUG
                         print("💰Purchase completed: \(info.entitlements)")
                         #endif
+                        showPaywall = false
                         purchaseCompleted?()
                     }
                     .onRestoreCompleted { info in
                         #if DEBUG
                         print("💰Purchases restored: \(info.entitlements)")
                         #endif
+                        showPaywall = false
                         restoreCompleted?()
                     }
                     .onPurchaseFailure { error in
