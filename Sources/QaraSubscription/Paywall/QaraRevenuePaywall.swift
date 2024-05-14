@@ -11,7 +11,11 @@ import SwiftUI
 
 @MainActor
 public struct QaraRevenuePaywall: View {
+    
+    let offeringIdentifier: String = "Default"
     let entitlementIdentifier: String
+    
+    @State var offering: Offering?
 
     var purchaseStarted: (() -> Void)?
     var purchaseCompleted: (() -> Void)?
@@ -54,11 +58,15 @@ public struct QaraRevenuePaywall: View {
                         .keys
                         .contains(entitlementIdentifier)
                 {
-                    showPaywall = true
+                    Purchases.shared.getOfferings { (offerings, error) in
+                        if let offering = offerings?.offering(identifier: offeringIdentifier) {
+                            self.offering = offering
+                        }
+                    }
                 }
             }
-            .fullScreenCover(isPresented: $showPaywall, content: {
-                PaywallView(displayCloseButton: false)
+            .fullScreenCover(item: $offering, content: { offering in
+                PaywallView(offering: offering, displayCloseButton: false)
                     .onPurchaseCancelled {
                         #if DEBUG
                         print("💰Purchase canceled")
