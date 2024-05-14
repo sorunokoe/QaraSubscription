@@ -12,7 +12,7 @@ import SwiftUI
 @MainActor
 public struct QaraRevenuePaywall: View {
     
-    let offeringIdentifier: String = "Default"
+    let offeringIdentifier: String
     let entitlementIdentifier: String
     
     @State var offering: Offering?
@@ -26,6 +26,7 @@ public struct QaraRevenuePaywall: View {
     @State var showPaywall: Bool = false
 
     public init(
+        offeringIdentifier: String = "Default",
         entitlementIdentifier: String,
         purchaseStarted: (() -> Void)? = nil,
         purchaseCompleted: (() -> Void)? = nil,
@@ -33,6 +34,7 @@ public struct QaraRevenuePaywall: View {
         restoreCompleted: (() -> Void)? = nil,
         purchaseFailed: (() -> Void)? = nil
     ) {
+        self.offeringIdentifier = offeringIdentifier
         self.entitlementIdentifier = entitlementIdentifier
         self.purchaseStarted = purchaseStarted
         self.purchaseCompleted = purchaseCompleted
