@@ -53,6 +53,7 @@ public struct QaraRevenuePaywall: View {
                     #endif
                     return
                 }
+                try? await Task.sleep(nanoseconds: 1_000_000)
                 if
                     let info = try? await Purchases.shared.customerInfo(),
                     !info.entitlements
